@@ -1,4 +1,4 @@
-Apache Logging JDK Bridges
+Apache Logging SLF4J Bridges
 Copyright 2024 The Apache Software Foundation
 
 This product includes software developed at

@@ -60,6 +60,7 @@
 
     <!-- Modules here must have a corresponding entry in `dependencyManagement > dependencies` block below! -->
     <module>log4j-api-to-slf4j</module>
+    <module>slf4j-to-log4j-api</module>
 
   </modules>
 
@@ -103,6 +104,12 @@
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-api-to-slf4j</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>slf4j-to-log4j-api</artifactId>
         <version>${project.version}</version>
       </dependency>
 
