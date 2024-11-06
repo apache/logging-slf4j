@@ -16,143 +16,122 @@
   ~ limitations under the License.
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j</artifactId>
+    <artifactId>log4j-slf4j-parent</artifactId>
     <version>${revision}</version>
-    <relativePath>../log4j-parent</relativePath>
+    <relativePath>../parent</relativePath>
   </parent>
 
-  <artifactId>log4j-to-slf4j</artifactId>
+  <artifactId>log4j-api-to-slf4j</artifactId>
 
-  <name>Log4j API to SLF4J Adapter</name>
+  <name>Log4j API to SLF4J logging bridge</name>
 
   <description>Forwards the Log4j API calls to SLF4J.
     (Refer to the `log4j-slf4j[2]-impl` artifacts for forwarding SLF4J to the Log4j API.)</description>
 
   <properties>
+    <!-- Dependency versions -->
+    <logback.version>1.5.12</logback.version>
+    <osgi.framework.version>1.8.0</osgi.framework.version>
 
     <!--
       ~ OSGi and JPMS options
       -->
     <slf4j.support.range>[1.7,3)</slf4j.support.range>
     <bnd-extra-package-options>
-      <!-- Annotations only -->
-      org.jspecify.*;resolution:=optional,
       <!-- This bridge also support SLF4J 2.x -->
       org.slf4j.*;version="${slf4j.support.range}"
     </bnd-extra-package-options>
-    <bnd-extra-module-options>
-      <!-- Remove `transitive` for optional dependencies -->
-      org.jspecify;transitive=false
-    </bnd-extra-module-options>
-
-    <slf4j2.version>2.0.16</slf4j2.version>
   </properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>${slf4j2.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
+
     <dependency>
       <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.core</artifactId>
+      <artifactId>org.osgi.framework</artifactId>
+      <version>${osgi.framework.version}</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.jspecify</groupId>
-      <artifactId>jspecify</artifactId>
-      <scope>provided</scope>
-    </dependency>
+
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
     </dependency>
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
+
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest</artifactId>
-      <scope>test</scope>
-    </dependency>
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
+      <artifactId>junit-jupiter-api</artifactId>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-core</artifactId>
+      <version>${logback.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-core</artifactId>
+      <version>${logback.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
+
+    <!-- For the JUnit extensions -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api-test</artifactId>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 
   <build>
     <plugins>
-      <!--
-        ~ Unban Logback.
-        -->
+
+      <!-- TODO: Fix parallel testing -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>ban-logging-dependencies</id>
-            <configuration>
-              <rules>
-                <bannedDependencies>
-                  <includes>
-                    <include>ch.qos.logback:*:*:*:test</include>
-                  </includes>
-                </bannedDependencies>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <reuseForks>false</reuseForks>
+        </configuration>
       </plugin>
+
     </plugins>
   </build>
 </project>
