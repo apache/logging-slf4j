@@ -33,7 +33,7 @@
 
   <properties>
     <!-- Dependency versions -->
-    <logback.version>1.5.12</logback.version>
+    <logback.version>1.5.13</logback.version>
     <osgi.framework.version>1.8.0</osgi.framework.version>
 
     <!--
